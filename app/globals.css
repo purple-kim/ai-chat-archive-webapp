@@ -1,0 +1,242 @@
+:root {
+  --bg: #f7f7f8;
+  --card-bg: #ffffff;
+  --border: #e5e5e5;
+  --text: #1a1a1a;
+  --sub: #767676;
+  --accent: #000000;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  font-family: -apple-system, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header {
+  padding: 40px 24px 24px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+h1 {
+  font-size: 28px;
+  margin: 0;
+}
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.export-btn {
+  background: #111111;
+  border: 1px solid #111111;
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+.dd-trigger.export-btn {
+  color: #ffffff;
+}
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#search {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+.row-with-dd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tag-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.tag-row.sub-row {
+  padding-left: 0;
+}
+.tag-filter {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--sub);
+}
+.tag-filter.main-filter {
+  font-weight: 600;
+}
+.tag-filter.sub-filter {
+  font-size: 12px;
+  padding: 5px 10px;
+  color: var(--sub);
+}
+.tag-filter.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  border-style: solid;
+}
+.dd-group {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
+}
+.dd {
+  position: relative;
+}
+.dd-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--sub);
+  cursor: pointer;
+  user-select: none;
+  background: none;
+  border: none;
+}
+.dd-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.dd-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 130px;
+  z-index: 10;
+}
+.dd-menu.open {
+  display: block;
+}
+.dd-item {
+  padding: 6px 10px;
+  font-size: 13px;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dd-item:hover {
+  background: #f2f2f2;
+}
+.dd-item.active {
+  font-weight: 600;
+  color: #000;
+}
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px 24px 60px;
+}
+.entry {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+.entry-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.entry-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.entry-date {
+  font-size: 12px;
+  color: var(--sub);
+}
+.entry-source {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #ededed;
+  color: var(--accent);
+}
+.entry-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.entry-content {
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  color: #333;
+  margin-bottom: 14px;
+}
+.entry-topic-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: #1a5fb4;
+  background: #e0edfc;
+}
+.entry-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.copy-btn,
+.del-btn {
+  flex-shrink: 0;
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--sub);
+  cursor: pointer;
+}
+#empty-state {
+  text-align: center;
+  color: var(--sub);
+  padding: 60px 0;
+  font-size: 14px;
+}
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(8px);
+  background: #111111;
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
