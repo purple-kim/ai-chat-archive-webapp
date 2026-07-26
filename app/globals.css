@@ -40,6 +40,8 @@ h1 {
 }
 .dd-trigger.export-btn {
   color: #ffffff;
+  background: #111111;
+  border: 1px solid #111111;
 }
 .toolbar {
   display: flex;
@@ -187,9 +189,32 @@ main {
 .entry-content {
   font-size: 14px;
   line-height: 1.7;
-  white-space: pre-wrap;
   color: #333;
   margin-bottom: 14px;
+}
+.entry-content p {
+  white-space: pre-wrap;
+  margin: 0 0 12px;
+}
+.entry-content p:last-child {
+  margin-bottom: 0;
+}
+.entry-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.entry-content th,
+.entry-content td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.entry-content th {
+  background: #f2f2f2;
+  font-weight: 600;
 }
 .entry-topic-badge {
   display: inline-block;

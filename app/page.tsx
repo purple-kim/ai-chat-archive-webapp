@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Entry, SUB_MAP, TOPIC_LABELS, sourceLabel } from "@/lib/topics";
 
 const TOPIC_OPTIONS = [
@@ -47,7 +49,10 @@ export default function Home() {
   }, [toast]);
 
   useEffect(() => {
-    const closeAll = () => setOpenDd(null);
+    const closeAll = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest(".dd")) return;
+      setOpenDd(null);
+    };
     document.addEventListener("click", closeAll);
     return () => document.removeEventListener("click", closeAll);
   }, []);
@@ -304,7 +309,11 @@ export default function Home() {
               </div>
             </div>
             <div className="entry-title">{entry.title}</div>
-            <div className="entry-content">{entry.content}</div>
+            <div className="entry-content">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {entry.content}
+              </ReactMarkdown>
+            </div>
             <span className="entry-topic-badge">
               {TOPIC_LABELS[entry.topic] ?? entry.topic}
             </span>
