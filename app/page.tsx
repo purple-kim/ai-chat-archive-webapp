@@ -31,6 +31,7 @@ export default function Home() {
   const [openDd, setOpenDd] = useState<string | null>(null);
   const [toast, setToast] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetch("/api/entries")
@@ -98,6 +99,27 @@ export default function Home() {
   function handleExport(format: "csv" | "md") {
     window.location.href = `/api/export?format=${format}`;
     setOpenDd(null);
+  }
+
+  function toggleExpand(id: string) {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
+
+  function snippetOf(content: string): string {
+    const plain = content
+      .replace(/[#>*_`~]/g, "")
+      .replace(/\|/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    return plain.length > 80 ? plain.slice(0, 80) + "…" : plain;
   }
 
   const subOptions = activeMain === "all" ? [] : SUB_MAP[activeMain] ?? [];
@@ -285,40 +307,72 @@ export default function Home() {
           </div>
         )}
 
-        {filtered.map((entry) => (
-          <div className="entry" key={entry.id}>
-            <div className="entry-meta">
-              <div className="entry-meta-left">
-                <span className="entry-date">
-                  {entry.entry_date.replaceAll("-", ".")}
-                </span>
-                <span className="entry-source">
-                  {sourceLabel(entry.main, entry.sub)}
-                </span>
+        {filtered.map((entry) => {
+          const isExpanded = expandedIds.has(entry.id);
+          return (
+            <div
+              className={`entry ${isExpanded ? "expanded" : ""}`}
+              key={entry.id}
+            >
+              <div className="entry-meta">
+                <div className="entry-meta-left">
+                  <span className="entry-date">
+                    {entry.entry_date.replaceAll("-", ".")}
+                  </span>
+                  <span className="entry-source">
+                    {sourceLabel(entry.main, entry.sub)}
+                  </span>
+                </div>
+                <div className="entry-actions">
+                  <button
+                    className="copy-btn"
+                    onClick={() => handleCopy(entry)}
+                  >
+                    {copiedId === entry.id ? "복사됨" : "복사"}
+                  </button>
+                  <button
+                    className="del-btn"
+                    onClick={() => handleDelete(entry.id)}
+                  >
+                    삭제
+                  </button>
+                </div>
               </div>
-              <div className="entry-actions">
-                <button className="copy-btn" onClick={() => handleCopy(entry)}>
-                  {copiedId === entry.id ? "복사됨" : "복사"}
-                </button>
-                <button
-                  className="del-btn"
-                  onClick={() => handleDelete(entry.id)}
+              <div className="entry-title">{entry.title}</div>
+              {isExpanded ? (
+                <div className="entry-content">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {entry.content}
+                  </ReactMarkdown>
+                </div>
+              ) : (
+                <p className="entry-snippet">{snippetOf(entry.content)}</p>
+              )}
+              <span className="entry-topic-badge">
+                {TOPIC_LABELS[entry.topic] ?? entry.topic}
+              </span>
+              <div
+                className="expand-tab"
+                role="button"
+                tabIndex={0}
+                onClick={() => toggleExpand(entry.id)}
+              >
+                <span>{isExpanded ? "접기" : "펼치기"}</span>
+                <svg
+                  className={`expand-chev ${isExpanded ? "open" : ""}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  삭제
-                </button>
+                  <path d="M6 9l6 6l6 -6" />
+                </svg>
               </div>
             </div>
-            <div className="entry-title">{entry.title}</div>
-            <div className="entry-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {entry.content}
-              </ReactMarkdown>
-            </div>
-            <span className="entry-topic-badge">
-              {TOPIC_LABELS[entry.topic] ?? entry.topic}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </main>
 
       <div id="toast" className={toast ? "show" : ""}>
