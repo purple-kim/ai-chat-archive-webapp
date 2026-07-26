@@ -71,8 +71,8 @@ export default function Home() {
         return mainMatch && subMatch && topicMatch && textMatch;
       })
       .sort((a, b) => {
-        const da = new Date(a.entry_date).getTime();
-        const db = new Date(b.entry_date).getTime();
+        const da = new Date(a.created_at).getTime();
+        const db = new Date(b.created_at).getTime();
         return activeSort === "desc" ? db - da : da - db;
       });
   }, [entries, search, activeMain, activeSub, activeSort, activeTopic]);
